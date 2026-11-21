@@ -71,7 +71,7 @@
 
 **S21　提供 Service**：`Service` 子类在其构造器内调用 `super(ctx, name)`；该实例因此同时是本次加载的 fiber 主体，并被登记为当前 Context 上名为 `name` 的 Service，随 fiber 卸载而移除。`name` 由插件作者选定，作为公开名字。
 
-**S22　agent**：DSH 中承载一次运行的执行体对象；非 Cordis 概念。
+**S22　agent**：由 `dsh-agent` 定义、经 `ctx.agents` 注册表访问的执行体对象，绑定到一个 Session（`agent.id` 即 SessionId）；它拥有自己的 `ctx`，状态随 `agent/status` 变化。agent 不是 Cordis 原语，而是预装插件提供的运行对象；它本身不是 Plugin，其具体实现由 `dsh-agent-loop` 提供。
 
 **S23　注册作用域（scope key）**：注册表的分层可见性模型；`ScopeKey` 为不透明对象身份（本机 agent loop 以活跃 agent 对象作 key）；注册落在全局 layer 或某 key 的 layer，读取时按"全局 → 该 key"合并，后者遮蔽前者。
 
@@ -166,6 +166,7 @@ S35 HMR                                        ← S18 / S26 / S07
 | 解析失败时的具体错误类型／错误码 | **未实测** |
 | `inject` 的生命周期语义（服务变更后卸载重跑） | 来自 `docs/cordis-api/registry.zh.md` 的 `ctx.inject` 条目 |
 | HMR 覆盖范围（模块 + profile 配置） | 来自 `@deepseek-ai/dsh-hmr` 包描述 |
+| agent 与 session 的一对一关系（含子代理冷恢复时是否复用同一 Session） | 留到阶段一新增项 **T25「Agent 与 Session」** 再讲；本文件只定义 agent 作为 scope key 的用法 |
 
 ## 五、对应官方文档
 
